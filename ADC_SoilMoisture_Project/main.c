@@ -14,6 +14,7 @@
 #include "sensor_processing.h"
 
 #define ACTIVATE_SLEEP_MODE
+#define DELAY_IN_uS 100UL
 
 char value_buf[8] = { 0 };
 char msg_to_transmit[20] = { 0 };
@@ -28,6 +29,9 @@ volatile uint16_t U16_dec_part = 0;
 volatile float f_temp = 0;
 
 volatile char ADCInterruptFlag = 1;
+extern volatile char filtering_cplt_flag;
+extern meas_val_t measured_val;
+
 void init_adc()
 {
 
@@ -36,7 +40,7 @@ void init_adc()
 	(1 << ADIE) | /*Interrupt enable*/
 	(1 << ADLAR) | /*Left-adjust result enabled*/
 	(1 << ADATE) | /*Auto-trigger enabled*/
-	(1 << ADPS2) | (1 << ADPS1)); /*ADPS[2:0]  110-->Prescaler is 64  */
+	(1 << ADPS2)); /*ADPS[2:0]  100-->Prescaler is 16  */
 
 	ADMUX = ((1 << REFS1) | (1 << REFS0) | (0 << MUX0)); /*ADC channel 0 is chosen*/
 }
@@ -44,8 +48,6 @@ void init_adc()
 int main()
 {
 	DDRC = 0x00;
-
-	meas_val_t measured_val;
 
 	init_adc();
 	usart_init(BAUD_VAL);
@@ -63,17 +65,18 @@ int main()
 
 		if (ADCInterruptFlag == 1)
 		{
-
-
 			cli();
-			signal_processing(U16_adc_val, &measured_val);
+			signal_acquisition(U16_adc_val);
+			//signal_processing(U16_adc_val,&measured_val);
 			sei();
+			ADCInterruptFlag = 0;
+		}
 
-
-
-
+		if (filtering_cplt_flag == TRUE)
+		{
+			cli();
 			dec_val_buf[0] = '.';
-			sprintf(dec_val_buf, "%1u", measured_val.mantissa_part); //Convert the mantissa of number t string
+			sprintf(dec_val_buf, "%1u", measured_val.mantissa_part); /*Convert the mantissa of number t string*/
 
 			sprintf(value_buf, "%u", measured_val.integer_part); /*Convert the characteristic of number to
 			 string	 	 	 	 	*/
@@ -85,14 +88,11 @@ int main()
 
 			USART_Tx_string(msg_to_transmit);
 
+			filtering_cplt_flag = FALSE;
+			sei();
 
-
-
-
-
-			_delay_ms(100);
-			ADCInterruptFlag = 0;
 		}
+		_delay_us(DELAY_IN_uS);
 
 	}
 

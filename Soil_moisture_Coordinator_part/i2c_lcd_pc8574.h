@@ -43,11 +43,9 @@ void LCD_Clear_Line(uint8_t line);
 unsigned char bit_test(uint8_t nibble, uint8_t bit_num);
 void Write_to_LCD(unsigned char data_to_write);
 
-
 void LCD_BL(uint8_t status); // set blacklight
 
 uint8_t _LCD_Build_Byte();
 void _LCD_Write_Upper_Nibble(uint8_t u);
 void _LCD_Write_Lower_Nibble(uint8_t l);
-
 

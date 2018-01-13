@@ -23,14 +23,14 @@
 
 //uint8_t  LCD_BL_Status = 1;     // 1 for POSITIVE control, 0 for NEGATIVE control
 
-uint8_t  pin_E;//   =    I2C_BYTE.2
-uint8_t  pin_RW;//  =    I2C_BYTE.1
-uint8_t  pin_RS;//  =    I2C_BYTE.0
-uint8_t  pin_D4;//  =    I2C_BYTE.4
-uint8_t  pin_D5;//  =    I2C_BYTE.5
-uint8_t  pin_D6;//  =    I2C_BYTE.6
-uint8_t  pin_D7;//  =    I2C_BYTE.7
-uint8_t  pin_BL;//  =    I2C_BYTE.3
+uint8_t pin_E; //   =    I2C_BYTE.2
+uint8_t pin_RW; //  =    I2C_BYTE.1
+uint8_t pin_RS; //  =    I2C_BYTE.0
+uint8_t pin_D4; //  =    I2C_BYTE.4
+uint8_t pin_D5; //  =    I2C_BYTE.5
+uint8_t pin_D6; //  =    I2C_BYTE.6
+uint8_t pin_D7; //  =    I2C_BYTE.7
+uint8_t pin_BL; //  =    I2C_BYTE.3
 
 void LCD_Init();
 void LCD_Goto(uint8_t x, uint8_t y);

@@ -2,8 +2,10 @@
 
 #define Fosc 16000000UL
 
-result check_TWI_status(statuscode stat) {
-	switch (stat) {
+result check_TWI_status(statuscode stat)
+{
+	switch (stat)
+	{
 	case START:
 		if ((TWSR & 0xF8) == START)
 			return SUCCESS;
@@ -75,7 +77,8 @@ result check_TWI_status(statuscode stat) {
 
 }
 
-void debug_led(swit val) {
+void debug_led(swit val)
+{
 	if (val == SET)
 		PORTB |= (1 << PORTB1);
 	else
@@ -83,8 +86,9 @@ void debug_led(swit val) {
 
 }
 
-void set_i2c_clock(unsigned long freq_in_khz) {
-	TWCR = 1 << TWEN;      /* Enable TWI module*/
+void set_i2c_clock(unsigned long freq_in_khz)
+{
+	TWCR = 1 << TWEN; /* Enable TWI module*/
 	TWSR |= (1 << TWPS0); /* Prescaler 4  */
 
 	unsigned long baud = 0, freq = 0;
@@ -96,7 +100,8 @@ void set_i2c_clock(unsigned long freq_in_khz) {
 
 }
 
-void send_start(void) {
+void send_start(void)
+{
 
 	TWCR = ((1 << TWEN) | (1 << TWSTA) | (1 << TWINT));
 	while (!(TWCR & (1 << TWINT)))
@@ -104,13 +109,17 @@ void send_start(void) {
 
 }
 
-void send_address(U8 add, access_mode acc) {
-	if (acc == read_bit) {
+void send_address(U8 add, access_mode acc)
+{
+	if (acc == read_bit)
+	{
 		TWDR = ((U8) (add << 1) | (U8) 0x01);
 		TWCR = ((1 << TWINT) | (1 << TWEN));
 		while (!(TWCR & (1 << TWINT)))
 			;  //wait for TWINT flag SET
-	} else {
+	}
+	else
+	{
 		TWDR = ((U8) (add << 1) | (U8) 0x00);
 		// TWDR = 0x68 ;
 		TWCR = ((1 << TWINT) | (1 << TWEN));
@@ -120,7 +129,8 @@ void send_address(U8 add, access_mode acc) {
 
 }
 
-void transmit_data(unsigned char dat) {
+void transmit_data(unsigned char dat)
+{
 
 	TWDR = dat;
 	TWCR = ((1 << TWINT) | (1 << TWEN));
@@ -128,13 +138,15 @@ void transmit_data(unsigned char dat) {
 		;
 }
 
-void send_stop() {
+void send_stop()
+{
 
 	TWCR = ((1 << TWINT) | (1 << TWEN) | (1 << TWSTO));
 
 }
 
-unsigned char receive_byte() {
+unsigned char receive_byte()
+{
 
 	TWCR = ((1 << TWINT) | (1 << TWEN));
 	while (!(TWCR & (1 << TWINT)))

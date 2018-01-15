@@ -14,7 +14,7 @@
 #include "sensor_processing.h"
 
 #define ACTIVATE_SLEEP_MODE
-#define DELAY_IN_uS 100UL
+#define DELAY_IN_uS 10000UL
 
 char value_buf[8] = { 0 };
 char msg_to_transmit[20] = { 0 };
@@ -40,7 +40,7 @@ void init_adc()
 	(1 << ADIE) | /*Interrupt enable*/
 	(1 << ADLAR) | /*Left-adjust result enabled*/
 	(1 << ADATE) | /*Auto-trigger enabled*/
-	(1 << ADPS2)); /*ADPS[2:0]  100-->Prescaler is 16  */
+	(1 << ADPS2) ); /*ADPS[2:0]  100-->Prescaler is 16  */
 
 	ADMUX = ((1 << REFS1) | (1 << REFS0) | (0 << MUX0)); /*ADC channel 0 is chosen*/
 }
@@ -63,13 +63,13 @@ int main()
 		;
 #endif
 
-		if (ADCInterruptFlag == 1)
+		if (ADCInterruptFlag == TRUE)
 		{
 			cli();
 			signal_acquisition(U16_adc_val);
 			//signal_processing(U16_adc_val,&measured_val);
 			sei();
-			ADCInterruptFlag = 0;
+			ADCInterruptFlag = FALSE;
 		}
 
 		if (filtering_cplt_flag == TRUE)
@@ -102,7 +102,7 @@ int main()
 ISR(ADC_vect)
 {
 	cli();
-	ADCInterruptFlag = 1;
+	ADCInterruptFlag = TRUE;
 	U16_adc_val = ADCW;
 	sei();
 

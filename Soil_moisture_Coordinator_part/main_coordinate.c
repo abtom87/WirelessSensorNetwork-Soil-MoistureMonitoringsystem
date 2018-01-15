@@ -14,7 +14,7 @@
 #include "i2c_lcd_pc8574.h"
 
 #define BUFFER_SIZE 20
-#define DELAY_IN_MICROSECONDS 100U
+#define DELAY_IN_MICROSECONDS 1000U
 
 char Rx_string_buff[BUFFER_SIZE] = { 0 };
 
@@ -51,7 +51,7 @@ int main()
 			{
 				for (i = 0; i < BUFFER_SIZE; i++)
 					USART_Tx_byte(&Rx_string_buff[i]);
-				USART_Tx_string(" ");
+				USART_Tx_string("");
 				count = 0;
 
 				LCD_Goto(1, 1);

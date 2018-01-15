@@ -1,7 +1,7 @@
 # Wireless sensor network- Soilmoisture monitoring system
 
 
-![alt text](https://github.com/abtom87/WirelessSensorNetwork-Soil-MoistureMonitoringsystem/tree/master/Images/1.jpg)
+![Coordinator module](https://github.com/abtom87/WirelessSensorNetwork-Soil-MoistureMonitoringsystem/tree/master/Images/1.jpg)
 
 ## Summary
 This project consists of two parts, one part is the sensor node which measures
